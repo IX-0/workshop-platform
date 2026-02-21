@@ -18,14 +18,9 @@ resource "aws_iam_role" "cluster" {
     ]
   })
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-cluster-role"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-cluster-role"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
@@ -58,14 +53,9 @@ resource "aws_iam_role" "fargate" {
     ]
   })
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-fargate-role"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-fargate-role"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "fargate_AmazonEKSFargatePodExecutionRolePolicy" {
@@ -113,15 +103,10 @@ resource "aws_iam_role" "lb_controller" {
     ]
   })
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-lb-controller-role"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-      Purpose     = "AWS Load Balancer Controller IRSA"
-    }
-  )
+  tags = {
+    Name    = "${var.cluster_name}-lb-controller-role"
+    Purpose = "AWS Load Balancer Controller IRSA"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "lb_controller" {

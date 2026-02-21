@@ -15,14 +15,9 @@ resource "aws_security_group" "cluster" {
     description = "Allow all outbound traffic"
   }
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-cluster-sg"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-cluster-sg"
+  }
 }
 
 resource "aws_security_group_rule" "cluster_ingress_workstation_https" {

@@ -7,9 +7,3 @@ variable "project_names" {
     error_message = "At least one project name must be provided."
   }
 }
-
-variable "tags" {
-  description = "Tags to apply to all ECR repositories"
-  type        = map(string)
-  default     = {}
-}

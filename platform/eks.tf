@@ -6,14 +6,9 @@ resource "aws_cloudwatch_log_group" "cluster" {
   name              = "/aws/eks/${var.cluster_name}/cluster"
   retention_in_days = var.cluster_log_retention_days
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-logs"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-logs"
+  }
 }
 
 # ============================================================================
@@ -44,14 +39,9 @@ resource "aws_eks_cluster" "main" {
     aws_iam_role_policy_attachment.cluster_AmazonEKSVPCResourceController,
   ]
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = var.cluster_name
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = var.cluster_name
+  }
 }
 
 # ============================================================================
@@ -67,14 +57,9 @@ resource "aws_iam_openid_connect_provider" "cluster" {
   thumbprint_list = [data.tls_certificate.cluster.certificates[0].sha1_fingerprint]
   url             = aws_eks_cluster.main.identity[0].oidc[0].issuer
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-oidc-provider"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-oidc-provider"
+  }
 }
 
 # ============================================================================
@@ -102,14 +87,9 @@ resource "aws_eks_access_entry" "admin" {
   principal_arn = each.value
   type          = "STANDARD"
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-admin-access"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-admin-access"
+  }
 }
 
 resource "aws_eks_access_policy_association" "admin" {

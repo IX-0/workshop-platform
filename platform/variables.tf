@@ -99,9 +99,3 @@ variable "ecr_project_names" {
   type        = list(string)
   default     = []
 }
-
-variable "tags" {
-  description = "Additional tags to apply to all resources"
-  type        = map(string)
-  default     = {}
-}

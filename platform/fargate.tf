@@ -12,14 +12,9 @@ resource "aws_eks_fargate_profile" "kube_system" {
     namespace = "kube-system"
   }
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-kube-system-fargate-profile"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-kube-system-fargate-profile"
+  }
 }
 
 resource "aws_eks_fargate_profile" "default" {
@@ -32,14 +27,9 @@ resource "aws_eks_fargate_profile" "default" {
     namespace = "default"
   }
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-default-fargate-profile"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-default-fargate-profile"
+  }
 }
 
 resource "aws_eks_fargate_profile" "additional" {
@@ -54,12 +44,7 @@ resource "aws_eks_fargate_profile" "additional" {
     namespace = each.value
   }
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-${each.value}-fargate-profile"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-${each.value}-fargate-profile"
+  }
 }

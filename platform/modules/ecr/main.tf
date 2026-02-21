@@ -10,7 +10,9 @@ resource "aws_ecr_repository" "this" {
     scan_on_push = true
   }
 
-  tags = var.tags
+  tags = {
+    Name = each.value
+  }
 }
 
 # Lifecycle policy for each repository:

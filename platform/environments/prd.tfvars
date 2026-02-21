@@ -39,10 +39,3 @@ aurora_skip_final_snapshot      = false
 aurora_backup_retention_period  = 14
 aurora_backup_schedule          = "cron(0 2 * * ? *)"
 aurora_backup_delete_after_days = 90
-
-# Tags
-tags = {
-  Environment = "prd"
-  ManagedBy   = "Terraform"
-  Project     = "Workshop Platform"
-}

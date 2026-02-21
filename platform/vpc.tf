@@ -7,14 +7,9 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-vpc"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-vpc"
+  }
 }
 
 # ============================================================================
@@ -24,14 +19,9 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-igw"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-igw"
+  }
 }
 
 # ============================================================================
@@ -46,16 +36,11 @@ resource "aws_subnet" "public" {
   availability_zone       = var.availability_zones[count.index]
   map_public_ip_on_launch = true
 
-  tags = merge(
-    var.tags,
-    {
-      Name                                        = "${var.cluster_name}-public-subnet-${count.index + 1}"
-      Environment                                 = var.environment
-      ManagedBy                                   = "Terraform"
-      "kubernetes.io/role/elb"                    = "1"
-      "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-    }
-  )
+  tags = {
+    Name                                        = "${var.cluster_name}-public-subnet-${count.index + 1}"
+    "kubernetes.io/role/elb"                    = "1"
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
+  }
 }
 
 resource "aws_subnet" "private" {
@@ -65,16 +50,11 @@ resource "aws_subnet" "private" {
   cidr_block        = var.private_subnet_cidrs[count.index]
   availability_zone = var.availability_zones[count.index]
 
-  tags = merge(
-    var.tags,
-    {
-      Name                                        = "${var.cluster_name}-private-subnet-${count.index + 1}"
-      Environment                                 = var.environment
-      ManagedBy                                   = "Terraform"
-      "kubernetes.io/role/internal-elb"           = "1"
-      "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-    }
-  )
+  tags = {
+    Name                                        = "${var.cluster_name}-private-subnet-${count.index + 1}"
+    "kubernetes.io/role/internal-elb"           = "1"
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
+  }
 }
 
 # ============================================================================
@@ -86,14 +66,9 @@ resource "aws_eip" "nat" {
 
   domain = "vpc"
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-nat-eip-${count.index + 1}"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-nat-eip-${count.index + 1}"
+  }
 
   depends_on = [aws_internet_gateway.main]
 }
@@ -104,14 +79,9 @@ resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat[count.index].id
   subnet_id     = aws_subnet.public[count.index].id
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-nat-gw-${count.index + 1}"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-nat-gw-${count.index + 1}"
+  }
 
   depends_on = [aws_internet_gateway.main]
 }
@@ -128,14 +98,9 @@ resource "aws_route_table" "public" {
     gateway_id = aws_internet_gateway.main.id
   }
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-public-rt"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-public-rt"
+  }
 }
 
 resource "aws_route_table_association" "public" {
@@ -158,14 +123,9 @@ resource "aws_route_table" "private" {
     }
   }
 
-  tags = merge(
-    var.tags,
-    {
-      Name        = "${var.cluster_name}-private-rt-${count.index + 1}"
-      Environment = var.environment
-      ManagedBy   = "Terraform"
-    }
-  )
+  tags = {
+    Name = "${var.cluster_name}-private-rt-${count.index + 1}"
+  }
 }
 
 resource "aws_route_table_association" "private" {
